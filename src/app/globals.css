@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+@theme {
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  
+  /* Gruvbox Dark Theme Colors */
+  --color-gruvbox-bg: #282828;
+  --color-gruvbox-bg-light: #3c3836;
+  --color-gruvbox-fg: #ebdbb2;
+  --color-gruvbox-gray: #928374;
+  --color-gruvbox-red: #cc241d;
+  --color-gruvbox-green: #98971a;
+  --color-gruvbox-yellow: #d79921;
+  --color-gruvbox-blue: #458588;
+  --color-gruvbox-purple: #b16286;
+  --color-gruvbox-aqua: #689d6a;
+  --color-gruvbox-orange: #d65d0e;
+}
+
+@layer base {
+  body {
+    @apply bg-gruvbox-bg text-gruvbox-fg;
+    font-family: var(--font-mono);
+  }
+}
+
+@layer components {
+  .terminal-window {
+    box-shadow: 0 0 20px rgba(40, 40, 40, 0.5);
+  }
+  
+  .terminal-content::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .terminal-content::-webkit-scrollbar-track {
+    @apply bg-gruvbox-bg-light/30;
+  }
+  
+  .terminal-content::-webkit-scrollbar-thumb {
+    @apply bg-gruvbox-gray/30 rounded;
+  }
+  
+  .terminal-content::-webkit-scrollbar-thumb:hover {
+    @apply bg-gruvbox-gray/50;
+  }
+  
+  .repo-entry {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .cursor-blink {
+    animation: blink 1s step-end infinite;
+  }
+  
+  @keyframes blink {
+    from, to {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+}
