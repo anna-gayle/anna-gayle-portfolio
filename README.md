@@ -19,7 +19,6 @@ A terminal-styled GitHub portfolio with a Gruvbox theme. View your repositories 
 - Gruvbox dark theme for that riced terminal aesthetic
 - Responsive design works on desktop and mobile
 - Pagination for repository list (handles unlimited repos)
-- Static export for easy GitHub Pages deployment
 
 ## Available Commands
 
@@ -96,60 +95,15 @@ anna-gayle-terminal/
 │   │   └── Terminal.tsx   # Terminal window wrapper
 │   └── lib/               # Utilities
 │       └── github.ts      # GitHub API functions
-├── next.config.js         # Next.js configuration
+├── next.config.ts         # Next.js configuration
 ├── tailwind.config.js     # Tailwind CSS configuration
 └── package.json           # Dependencies
 ```
 
-## Deployment to GitHub Pages
+## Live Demo
 
-### Option 1: Deploy manually
-
-```bash
-# Build the project
-npm run build
-
-# Export static files
-npm run export
-
-# Create .nojekyll file (Windows)
-mkdir out
-type nul > out\.nojekyll
-
-# Deploy using gh-pages
-npx gh-pages -d out -b gh-pages
-```
-
-### Option 2: Automatic with GitHub Actions
-
-Create `.github/workflows/deploy.yml`:
-
-```yaml
-name: Deploy to GitHub Pages
-
-on:
-  push:
-    branches: [main]
-
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - run: npm ci
-      - run: npm run build
-      - run: npm run export
-      - uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
-```
-
-After deployment, your site will be available at:
-`https://your-username.github.io/anna-gayle-terminal`
+The site is live on Vercel:
+[anna-gayle-portfolio.vercel.app](anna-gayle-portfolio.vercel.app)
 
 ## Customization
 
@@ -181,41 +135,6 @@ case 'your-command':
   setShowRepos(false);
   setActiveComponent('');
   break;
-```
-
-## Future-Proofing
-
-The repository list includes pagination that:
-- Shows 5 repositories initially
-- Displays a "Show more" button when you have more than 5 repos
-- Scales gracefully as your GitHub profile grows
-
-## Troubleshooting
-
-### API Rate Limits
-
-The GitHub API allows 60 requests per hour without authentication. If you exceed this, wait an hour or add a GitHub token:
-
-1. Create a token at [github.com/settings/tokens](https://github.com/settings/tokens)
-2. Add it to `.env.local`:
-```
-NEXT_PUBLIC_GITHUB_TOKEN=your_token_here
-```
-
-### Build Errors
-
-If you encounter build errors, try:
-
-```bash
-# Clear Next.js cache
-rm -rf .next out
-
-# Reinstall dependencies
-rm -rf node_modules package-lock.json
-npm install
-
-# Rebuild
-npm run build
 ```
 
 ## License
