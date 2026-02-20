@@ -33,15 +33,26 @@ export default function Home() {
   }, []);
 
   const handleCommand = (cmd: string) => {
-    const command = cmd.toLowerCase().trim();
+    const trimmedCmd = cmd.trim();
+    const command = trimmedCmd.toLowerCase();
     
-    switch(command) {
+    if (command === 'who am i' || command === 'whoami') {
+      setOutput([`${profile?.name || USERNAME}`]);
+      setShowRepos(false);
+      setActiveComponent('');
+      return;
+    }
+    
+    const commandParts = command.split(' ');
+    const mainCommand = commandParts[0];
+    
+    switch(mainCommand) {
       case 'help':
         setOutput([
           'Available commands:',
           '  help     - Show this help message',
           '  repos    - Show repository list',
-          '  stats    - Show fancy repository statistics',
+          '  stats    - Show repository statistics',
           '  graph    - Show star graph of top repos',
           '  clear    - Clear the terminal',
           '  profile  - Show user profile',
@@ -104,7 +115,19 @@ export default function Home() {
         break;
         
       default:
-        setOutput([`Command not found: ${command}. Type &apos;help&apos; for available commands.`]);
+        setOutput([
+          `Command not found: ${trimmedCmd}`,
+          '',
+          'Available commands:',
+          '  help     - Show this help message',
+          '  repos    - Show repository list',
+          '  stats    - Show repository statistics',
+          '  graph    - Show star graph of top repos',
+          '  clear    - Clear the terminal',
+          '  profile  - Show user profile',
+          '  whoami   - Display current user',
+          '  date     - Show current date and time',
+        ]);
         setShowRepos(false);
         setActiveComponent('');
     }
@@ -128,30 +151,28 @@ export default function Home() {
           
           <div className="space-y-4">
             <div className="text-gruvbox-fg/80">
-              Welcome to Anna Gayle&apos;s terminal portfolio. Type <span className="text-gruvbox-yellow">&apos;help&apos;</span> for available commands.
+              Welcome to Anna Gayle&apos;s terminal portfolio. Type{' '}
+              <span className="text-gruvbox-yellow">&apos;help&apos;</span>{' '}
+              for available commands.
             </div>
 
-            {/* Show repositories */}
             {showRepos && (
               <>
                 <div className="text-gruvbox-fg/70 text-sm border-t border-gruvbox-gray/30 pt-4">
-                    Latest repositories:
+                  Latest repositories:
                 </div>
                 <RepoList repos={repos} />
               </>
             )}
 
-            {/* Show stats component */}
             {activeComponent === 'stats' && !showRepos && (
               <StatsDisplay repos={repos} />
             )}
 
-            {/* Show graph component */}
             {activeComponent === 'graph' && !showRepos && (
               <StarGraph repos={repos} />
             )}
 
-            {/* Show regular text output */}
             {output.length > 0 && !showRepos && activeComponent === '' && (
               <div className="space-y-1 text-gruvbox-fg/90 border-t border-gruvbox-gray/30 pt-4">
                 {output.map((line, i) => (
