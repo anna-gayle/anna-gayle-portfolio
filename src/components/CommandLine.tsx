@@ -8,7 +8,9 @@ const CommandLine: React.FC<CommandLineProps> = ({ onCommand }) => {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const cursorRef = useRef<HTMLSpanElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,23 +45,48 @@ const CommandLine: React.FC<CommandLineProps> = ({ onCommand }) => {
     }
   };
 
+  // Calculate cursor position based on input length
+  const getCursorPosition = () => {
+    // Approximate width per character (monospace is consistent)
+    // 0.6em is the width of the cursor, so each character is roughly 0.6em
+    return `${input.length * 0.6}em`;
+  };
+
   useEffect(() => {
+    // Focus the input when component mounts
     inputRef.current?.focus();
   }, []);
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center mt-4">
-      <span className="text-gruvbox-green mr-2">$</span>
-      <input
-        ref={inputRef}
-        type="text"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyDown={handleKeyDown}
-        className="flex-1 bg-transparent border-none outline-none text-gruvbox-fg font-mono"
-        placeholder="Type &apos;help&apos; for available commands..."
-        spellCheck={false}
-      />
+    <form onSubmit={handleSubmit} className="flex items-center mt-4 font-mono">
+      <span className="text-gruvbox-green mr-2 font-bold">$</span>
+      <div className="relative flex-1">
+        <input
+          ref={inputRef}
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          className="terminal-input"
+          placeholder="Type 'help' for available commands..."
+          spellCheck={false}
+          aria-label="Terminal input"
+        />
+        {/* Custom cursor appears at the end of text when focused */}
+        {isFocused && (
+          <span 
+            ref={cursorRef}
+            className="terminal-cursor absolute" 
+            style={{ 
+              left: getCursorPosition(),
+              top: '0.15em',
+              pointerEvents: 'none'
+            }}
+          />
+        )}
+      </div>
     </form>
   );
 };

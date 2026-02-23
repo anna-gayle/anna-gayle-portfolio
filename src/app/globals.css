@@ -61,6 +61,43 @@
     }
   }
   
+  /* Terminal cursor styles */
+  .terminal-cursor {
+    display: inline-block;
+    width: 0.6em;
+    height: 1.2em;
+    background-color: var(--color-gruvbox-fg);
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    from, to {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+  /* Style the input to work with the custom cursor */
+  .terminal-input {
+    caret-color: transparent; /* Hide default cursor */
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--color-gruvbox-fg);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .terminal-input:focus {
+    outline: none;
+  }
+  
   .cursor-blink {
     animation: blink 1s step-end infinite;
   }
